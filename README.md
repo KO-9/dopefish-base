@@ -1,5 +1,15 @@
 [![Docker Image CI](https://github.com/joedwards32/CS2/actions/workflows/docker-image.yml/badge.svg?branch=main)](https://github.com/joedwards32/CS2/actions/workflows/docker-image.yml) [![Docker Build and Publish](https://github.com/joedwards32/CS2/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/joedwards32/CS2/actions/workflows/docker-publish.yml)
 
+# Konijn note #
+
+Install Docker Desktop https://www.docker.com/products/docker-desktop/
+Make sure it is running
+```
+cd bullseye
+docker -t cs2base .
+docker run -d --name=cs2base -e CS2_RCONPW=ENTERRCONPWHERE -v ./cs2mount:/home/steam/cs2-dedicated/ -p 27015:27015/tcp -p 27015:27015/udp -p 27020:27020/tcp cs2base
+```
+
 # What is Counter-Strike 2?
 For over two decades, Counter-Strike has offered an elite competitive experience, one shaped by millions of players from across the globe. And now the next chapter in the CS story is about to begin. This is Counter-Strike 2. 
 This Docker image contains the dedicated server of the game.
