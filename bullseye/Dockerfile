@@ -59,6 +59,7 @@ ENV CS2_SERVERNAME="cs2 private server" \
     TV_RELAY_PW="changeme" \
     TV_MAXRATE=0 \
     TV_DELAY=0 \
+    CS2_STEAMTOKEN="996533C1519EF88DA697BDF6C6445C39" \
     CS2_ADDITIONAL_ARGS=""
 
 # Set permissions on STEAMAPPDIR
@@ -67,11 +68,19 @@ RUN set -x \
         && chown -R "${USER}:${USER}" "${STEAMAPPDIR}" \
         && chmod 0777 "${STEAMAPPDIR}"
 
+COPY etc/acmrs.sh "${HOMEDIR}/acmrs.sh"
+RUN chmod +x "${HOMEDIR}/acmrs.sh"
 # Switch to user
+RUN apt update
+RUN apt install -y unzip zip
 USER ${USER}
 
 WORKDIR ${HOMEDIR}
 
+RUN wget https://mms.alliedmods.net/mmsdrop/2.0/mmsource-2.0.0-git1270-linux.tar.gz
+COPY etc/counterstrikesharp-with-runtime-build-86-linux-8b5eb7e.zip "${HOMEDIR}/counterstrikesharp-with-runtime-build-86-linux-8b5eb7e.zip"
+
+env DOTNET_HOSTBUILDER__RELOADCONFIGONCHANGE=false
 CMD ["bash", "entry.sh"]
 
 # Expose ports

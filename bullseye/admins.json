@@ -1,0 +1,7 @@
+{
+  "Konijn": {
+    "identity": "STEAM_0:1:3429321",
+    "immunity": 100,
+    "flags": ["@css/root", "@css/rcon", "@css/cvar", "@css/cheats", "@css/vote", "@css/vip", "@css/slay", "@css/generic"]
+  }
+}

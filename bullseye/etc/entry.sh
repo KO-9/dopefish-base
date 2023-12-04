@@ -6,13 +6,15 @@ mkdir -p "${STEAMAPPDIR}" || true
 # Download Updates
 
 bash "${STEAMCMDDIR}/steamcmd.sh" +force_install_dir "${STEAMAPPDIR}" \
-				+login anonymous \
-				+app_update "${STEAMAPPID}" \
-				+quit
+        +login anonymous \
+        +app_update "${STEAMAPPID}" \
+        +quit
+
 
 # steamclient.so fix
 mkdir -p ~/.steam/sdk64
 ln -sfT ${STEAMCMDDIR}/linux64/steamclient.so ~/.steam/sdk64/steamclient.so
+
 
 # Install server.cfg
 cp /etc/server.cfg "${STEAMAPPDIR}"/game/csgo/cfg/server.cfg
@@ -26,6 +28,7 @@ sed -i -e "s/{{SERVER_HOSTNAME}}/${CS2_SERVERNAME}/g" \
        -e "s/{{TV_RELAY_PW}}/${TV_RELAY_PW}/g" \
        -e "s/{{TV_MAXRATE}}/${TV_MAXRATE}/g" \
        -e "s/{{TV_DELAY}}/${TV_DELAY}/g" \
+       -e "s/{{CS2_STEAMTOKEN}}/${CS2_STEAMTOKEN}/g" \
        "${STEAMAPPDIR}"/game/csgo/cfg/server.cfg
 
 # Install hooks
@@ -47,6 +50,12 @@ fi
 if [[ ! -z $CS2_BOT_QUOTA_MODE ]] ; then
     sed -i "s/bot_quota_mode.*/bot_quota_mode ${CS2_BOT_QUOTA_MODE}/" "${STEAMAPPDIR}"/game/csgo/cfg/*
 fi
+
+cd "/home/steam/cs2-dedicated/game/csgo"
+cp /home/steam/mmsource-2.0.0-git1270-linux.tar.gz /home/steam/cs2-dedicated/game/csgo/
+cp /home/steam/counterstrikesharp-with-runtime-build-86-linux-8b5eb7e.zip /home/steam/cs2-dedicated/game/csgo/
+tar zxvf mmsource-2.0.0-git1270-linux.tar.gz
+unzip -o counterstrikesharp-with-runtime-build-86-linux-8b5eb7e.zip
 
 # Switch to server directory
 cd "${STEAMAPPDIR}/game/bin/linuxsteamrt64"
@@ -77,6 +86,9 @@ if [[ ! -z $CS2_RCON_PORT ]]; then
     simpleproxy -L "${CS2_RCON_PORT}" -R 127.0.0.1:"${CS2_PORT}" &
 fi
 
+bash /home/steam/acmrs.sh
+
+
 eval "./cs2" -dedicated \
         "${CS2_IP_ARGS}" -port "${CS2_PORT}" \
         -console \
@@ -88,6 +100,7 @@ eval "./cs2" -dedicated \
         +rcon_password "${CS2_RCONPW}" \
         +sv_password "${CS2_PW}" \
         +sv_lan "${CS2_LAN}" \
+        +sv_setsteamaccount "${CS2_STEAMTOKEN}" \
         "${CS2_ADDITIONAL_ARGS}"
 
 # Post Hook
