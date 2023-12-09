@@ -6,7 +6,7 @@ Install Docker Desktop https://www.docker.com/products/docker-desktop/
 Make sure it is running
 ```
 cd bullseye
-docker -t cs2base .
+docker build -t cs2base .
 docker run -d --name=cs2base -e CS2_RCONPW=ENTERRCONPWHERE -v ./cs2mount:/home/steam/cs2-dedicated/ -p 27015:27015/tcp -p 27015:27015/udp -p 27020:27020/tcp cs2base
 ```
 
